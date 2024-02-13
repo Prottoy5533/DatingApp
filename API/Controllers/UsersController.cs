@@ -1,5 +1,6 @@
 ﻿using API.Data;
 using API.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,6 +25,7 @@ namespace API.Controllers
             return users;
         }
 
+        
         [HttpGet("{Id}")]
         public async Task<ActionResult<AppUser>> GetUser(int Id)
         {
