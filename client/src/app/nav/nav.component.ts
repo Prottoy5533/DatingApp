@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+import { AccountService } from '../_services/account.service';
+import { Observable, of } from 'rxjs';
+import { User } from '../_models/user';
+
 
 @Component({
   selector: 'app-nav',
@@ -6,17 +10,30 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./nav.component.css']
 })
 export class NavComponent implements OnInit {
-  model:any ={}
+  model:any ={};
+  currentUser$: Observable<User|null> = of(null);
 
-  constructor(){}
+  constructor(private accountService: AccountService){}
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    this.currentUser$ = this.accountService.currentUser$;
   }
+
+  
 
   login()
   {
-    console.log(this.model);
+    this.accountService.login(this.model).subscribe({
+      next: res=>{
+        console.log(res);
+      },
+      error: error=>console.log(error)
+    })
+  }
+
+  logout(){
+    this.accountService.logout();
+
   }
 
 }
