@@ -1,36 +1,34 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { AccountService } from '../_services/account.service';
+import { ToastrService } from 'ngx-toastr';
 
 
 @Component({
   selector: 'app-register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent implements OnInit {
-  
   @Output() cancelREgister = new EventEmitter();
-  model:any ={};
+  model: any = {};
 
-
-  constructor(private accountService:AccountService){}
+  constructor(
+    private accountService: AccountService, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     throw new Error('Method not implemented.');
   }
 
-  register(){
+  register() {
     this.accountService.register(this.model).subscribe({
-      next:()=>{
+      next: () => {
         this.cancel();
       },
-      error: error=>console.log(error)
-    })
+      error: error => this.toastr.error(error.error),
+    });
   }
 
-  cancel()
-  {
+  cancel() {
     this.cancelREgister.emit(false);
   }
-
 }
