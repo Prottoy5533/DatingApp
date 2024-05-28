@@ -1,7 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { Member } from 'src/app/_models/member';
+
+import { Component, OnInit } from '@angular/core';
+import { Observable, take } from 'rxjs';
+import { Pagination } from 'src/app/_models/Pagination';
+
 import { MembersService } from 'src/app/_services/members.service';
+import { UserParams } from 'src/app/_models/userParams';
+import { AccountService } from 'src/app/_services/account.service';
+import { User } from 'src/app/_models/user';
 
 @Component({
   selector: 'app-member-list',
@@ -9,17 +15,56 @@ import { MembersService } from 'src/app/_services/members.service';
   styleUrls: ['./member-list.component.css'],
 })
 export class MemberListComponent implements OnInit {
-  members$: Observable<Member[]> | undefined;
+  //members$: Observable<Member[]> | undefined;
+  members: Member[] = [];
+  pagination: Pagination | undefined;
+  userParams: UserParams | undefined;
+  user: User | undefined;
+  genderList = [{value:'male',display:'Males'},{value:'female',display:'Females'}]
 
-  constructor(private memberService:MembersService){}
-
-  ngOnInit(): void {
-    this.members$ = this.memberService.getMembers();
-    
-
+  constructor(private memberService: MembersService,private accountService:AccountService) {
+    //this.userParams = this.memberService.getUserParams();
+    this.accountService.currentUser$.pipe(take(1)).subscribe({
+      next: user => {
+        if (user) {
+          this.userParams = new UserParams(user);
+          this.user = user;
+        }
+      }
+    })
   }
 
+  ngOnInit(): void {
+    //this.members$ = this.memberService.getMembers();
+    this.loadMembers();
+  }
 
+  loadMembers() {
+    if (!this.userParams) return;
+    this.memberService
+      .getMembers(this.userParams)
+      .subscribe({
+        next: (response) => {
+          if (response.result && response.pagination) {
+            this.members = response.result;
+            this.pagination = response.pagination;
+          }
+        },
+      });
+  }
 
+  resetFilters() {
+    if (this.user) {
+      this.userParams = new UserParams(this.user);
+      this.loadMembers();
+    }
+  }
 
+  pageChanged(event: any) {
+    if (this.userParams && this.userParams?.pageNumber !== event.page) {
+      //this.memberService.setUserParams(this.userParams);
+      this.userParams.pageNumber = event.page;
+      this.loadMembers();
+    }
+  }
 }
