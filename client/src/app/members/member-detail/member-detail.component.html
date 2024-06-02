@@ -16,7 +16,7 @@
         </div>
         <div>
           <strong>Last active:</strong>
-          <p>{{member.lastActive }}</p>
+          <p>{{member.lastActive + 'Z' | timeago}}</p>
         </div>
         <div>
           <strong>Member since:</strong>
@@ -47,7 +47,7 @@
         <p>{{member.interests}} </p>
       </tab>
       <tab heading="Photos" #photoTab="tab">
-        <gallery *ngIf="photoTab.active" 
+        <gallery *ngIf="photoTab.active"
         [items]="images" gallerize class="gallery"></gallery>
       </tab>
       <tab heading="Messages">
