@@ -1,7 +1,7 @@
 import { Member } from 'src/app/_models/member';
 import { Component, OnInit } from '@angular/core';
 import { MembersService } from '../_services/members.service';
-import { Pagination } from '../_models/Pagination';
+import { Pagination } from '../_models/pagination';
 
 @Component({
   selector: 'app-lists',
