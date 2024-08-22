@@ -10,6 +10,7 @@ import { timeDifference } from 'src/app/date-utils';
 import { MemberMessagesComponent } from "../member-messages/member-messages.component";
 import { Message } from 'src/app/_models/message';
 import { MessageService } from 'src/app/_services/message.service';
+import { PresenceService } from 'src/app/_services/presence.service';
 
 
 @Component({
@@ -38,7 +39,8 @@ export class MemberDetailComponent implements OnInit {
   constructor(
     private membersService: MembersService,
     private messageService:MessageService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public presenceService:PresenceService
   ) {
     this.timeDiff = { days: 0, hours: 0, minutes: 0, seconds: 0 };
   }
