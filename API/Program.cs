@@ -29,7 +29,7 @@ app.UseCors(builder => builder
 .AllowAnyHeader()
 .AllowAnyMethod()
 .AllowCredentials()
-.WithOrigins("https://localhost:4200"));a
+.WithOrigins("https://localhost:4200"));
 
 // Configure the HTTP request pipeline.
 
@@ -48,6 +48,7 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapHub<PresenceHub>("hubs/presence");
+app.MapHub<MessageHub>("hubs/message");
 
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
@@ -57,6 +58,8 @@ try
     var userManager = services.GetRequiredService<UserManager<AppUser>>();
     var roleManager = services.GetRequiredService<RoleManager<AppRole>>();
     await context.Database.MigrateAsync();
+    //context.Connections.RemoveRange(context.Connections);
+    await context.Database.ExecuteSqlRawAsync("TRUNCATE TABLE [Connections]");
     await Seed.SeedUsers(userManager,roleManager);
 
 }

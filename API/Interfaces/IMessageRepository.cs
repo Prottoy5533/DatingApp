@@ -3,6 +3,8 @@ using API.Helpers;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 using System.Text.RegularExpressions;
 using API.DTOs;
+using Group = API.Entities.Group;
+using Connection = API.Entities.Connection;
 
 namespace API.Interfaces
 {
@@ -17,11 +19,11 @@ namespace API.Interfaces
         Task<IEnumerable<MessageDto>> GetMessageThread(string currentUserName, string recipientUserName);
         
         Task<bool> SaveAllAsync();
-        //void AddGroup(Group group);
-        //void RemoveConnection(Connection connection);
-        //Task<Connection> GetConnection(string connectionId);
-        //Task<Group> GetMessageGroup(string groupName);
-        //Task<Group> GetGroupForConnection(string connectionId);
+        void AddGroup(Group group);
+        void RemoveConnection(Connection connection);
+        Task<Connection> GetConnectionAsync(string connectionId);
+        Task<Group> GetMessageGroupAsync(string groupName);
+        Task<Group> GetGroupForConnection(string connectionId);
     }
 
 }
