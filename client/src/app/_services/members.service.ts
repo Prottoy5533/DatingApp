@@ -1,7 +1,7 @@
 import { Member } from './../_models/member';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from './../../environments/environment.development';
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { map, of, take } from 'rxjs';
 import { PaginatedResult } from '../_models/pagination';
 import { UserParams } from '../_models/userParams';
@@ -18,9 +18,9 @@ export class MembersService {
   memberCache = new Map();
   userParams: UserParams | undefined;
   user: User | undefined;
-
+  http = inject(HttpClient);
   constructor(
-    private http: HttpClient,
+
     private accountService: AccountService
   ) {
     this.accountService.currentUser$.pipe(take(1)).subscribe({
